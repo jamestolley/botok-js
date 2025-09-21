@@ -1,0 +1,64 @@
+{
+  "name": "botok-js",
+  "version": "1.0.0",
+  "description": "JavaScript port of Botok - Tibetan text tokenizer for browser extensions and Node.js CLI",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "browser": "dist/index.browser.js",
+  "bin": {
+    "botok-js": "dist/cli.js"
+  },
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rollup -c",
+    "build:watch": "rollup -c -w",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "typecheck": "tsc --noEmit",
+    "dev": "npm run build:watch",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "tibetan",
+    "tokenizer",
+    "nlp",
+    "browser-extension",
+    "nodejs",
+    "text-processing",
+    "segmentation"
+  ],
+  "author": "James (ported from OpenPecha/Botok)",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/botok-js.git"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^24.0.0",
+    "@rollup/plugin-json": "^6.0.0",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-typescript": "^11.0.0",
+    "@types/jest": "^29.5.0",
+    "@types/node": "^18.15.0",
+    "@typescript-eslint/eslint-plugin": "^5.57.0",
+    "@typescript-eslint/parser": "^5.57.0",
+    "eslint": "^8.37.0",
+    "jest": "^29.5.0",
+    "rollup": "^3.20.0",
+    "@rollup/plugin-terser": "^0.4.0",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {},
+  "files": [
+    "dist/",
+    "resources/",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
