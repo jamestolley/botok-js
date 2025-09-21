@@ -204,7 +204,39 @@ While maintaining API compatibility where possible, this JavaScript port include
 
 ## License
 
-Apache 2.0 - see [LICENSE](LICENSE) file.
+This project is licensed under the Apache License 2.0 - see [LICENSE](LICENSE) file for details.
+
+### Attribution
+
+This software is a JavaScript port of [Botok](https://github.com/OpenPecha/Botok), originally developed by OpenPecha:
+
+```
+Copyright (c) OpenPecha development team
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
+
+### Development Dependencies
+
+The development dependencies used by this project are all under permissive licenses compatible with Apache-2.0:
+
+- **TypeScript**: Apache-2.0
+- **Jest**: MIT  
+- **ESLint**: MIT
+- **Rollup plugins**: MIT
+- Other development tools: MIT/ISC licenses
+
+Note: Development dependencies are not included in the distributed package and only affect the build/test process.
 
 ## Acknowledgments
 

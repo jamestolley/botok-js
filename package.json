@@ -29,11 +29,11 @@
     "text-processing",
     "segmentation"
   ],
-  "author": "James (ported from OpenPecha/Botok)",
+  "author": "Adapted from OpenPecha Botok",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/botok-js.git"
+    "url": "https://github.com/OpenPecha/Botok"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^24.0.0",
