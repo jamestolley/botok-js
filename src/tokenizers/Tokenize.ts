@@ -203,11 +203,12 @@ export class Tokenize {
       const chunkData = this.preProcessed!.chunks[syls[0]];
       const tokenSyls = [chunkData[0]];
       const tokenType = chunkData[1][0];
-      const tokenStart = chunkData[1][1];
-      const tokenLength = chunkData[1][2];
+      // Use syllable boundaries (chunkData[0]) instead of chunk boundaries (chunkData[1])
+      const tokenStart = chunkData[0]?.[1] ?? 0;
+      const tokenLength = chunkData[0]?.[2] ?? 0;
       const sylStartEnd = [{
-        start: chunkData[1][1],
-        end: chunkData[1][1] + chunkData[1][2]
+        start: chunkData[0]?.[1] ?? 0,
+        end: (chunkData[0]?.[1] ?? 0) + (chunkData[0]?.[2] ?? 0)
       }];
 
       if (ttype) {
@@ -227,17 +228,22 @@ export class Tokenize {
       // Multi-syllable token
       const tokenSyls = syls.map(idx => this.preProcessed!.chunks[idx][0]);
       const tokenType = this.preProcessed!.chunks[syls[syls.length - 1]][1][0];
-      const tokenStart = this.preProcessed!.chunks[syls[0]][1][1];
+      // Use syllable boundaries for multi-syllable tokens
+      const firstChunk = this.preProcessed!.chunks[syls[0]];
+      const tokenStart = firstChunk[0]?.[1] ?? 0;
       let tokenLength = 0;
       const sylStartEnd: { start: number; end: number }[] = [];
 
       for (const i of syls) {
         const chunkData = this.preProcessed!.chunks[i];
-        tokenLength += chunkData[1][2];
-        sylStartEnd.push({
-          start: chunkData[1][1],
-          end: chunkData[1][1] + chunkData[1][2]
-        });
+        // Use syllable data (chunkData[0]) instead of chunk data (chunkData[1])
+        if (chunkData[0]) {
+          tokenLength += chunkData[0][2];
+          sylStartEnd.push({
+            start: chunkData[0][1],
+            end: chunkData[0][1] + chunkData[0][2]
+          });
+        }
       }
 
       if (ttype) {
