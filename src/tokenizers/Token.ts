@@ -4,22 +4,21 @@
  */
 
 import { Token as IToken, SenseInfo, AffixationInfo } from '../types';
-import { TSEK, AA } from '../utils/constants';
 
 /**
  * Token class representing a tokenized unit with metadata
  */
 export class Token implements IToken {
-  public text: string = '';
+  public text = '';
   public textCleaned?: string;
   public textUnaffixed?: string;
   public pos?: string;
   public lemma?: string;
   public freq?: number;
-  public start: number = 0;
-  public length: number = 0;
+  public start = 0;
+  public length = 0;
   public charTypes?: string[];
-  public chunkType: string = '';
+  public chunkType = '';
   public syllables?: string[];
   public syllableIndices?: number[][];
   public syllableStartEnd?: Array<{ start: number; end: number }>;
@@ -183,7 +182,7 @@ export class Token implements IToken {
     }
 
     // Basic cleanup
-    let cleaned = this.text
+    const cleaned = this.text
       .replace(/\s+/g, ' ')  // Multiple spaces to single
       .replace(/་+/g, '་')   // Multiple tseks to single
       .trim();

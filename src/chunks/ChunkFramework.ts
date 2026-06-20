@@ -95,7 +95,7 @@ export class ChunkFramework extends ChunkFrameworkBase {
   public chunks: Array<[number[] | null, [ChunkMarkers, number, number]]> = [];
   private spacesAsPunct: boolean;
   
-  constructor(text: string, ignoreChars: string[] = [], spacesAsPunct: boolean = false) {
+  constructor(text: string, ignoreChars: string[] = [], spacesAsPunct = false) {
     super(text, ignoreChars);
     this.text = text;
     this.spacesAsPunct = spacesAsPunct;
@@ -380,26 +380,30 @@ export class ChunkFramework extends ChunkFrameworkBase {
    * This method prepares chunks for the tokenization engine
    */
   public serveSylsToTrie(): void {
-    // First, chunk the text into different types
     const boChunks = this.chunkBoText();
     const allChunks: Array<[number[] | null, [ChunkMarkers, number, number]]> = [];
     
     for (const [type, start, length] of boChunks) {
       if (type === ChunkMarkers.BO) {
-        // For Tibetan text, further chunk into syllables
-        const syllables = this.syllabify(start, start + length);
-        for (const syl of syllables) {
-          allChunks.push([
-            syl,
-            [ChunkMarkers.TEXT, start, length] // This is simplified
-          ]);
+        // Within Tibetan text, separate punctuation from text
+        const subChunks = this.chunkPunctuation(start, start + length);
+        
+        for (const [pType, pStart, pLength] of subChunks) {
+          if (pType === ChunkMarkers.PUNCT) {
+            allChunks.push([null, [ChunkMarkers.PUNCT, pStart, pLength]]);
+          } else {
+            // Non-punctuation Tibetan text — syllabify
+            const syllables = this.syllabify(pStart, pStart + pLength);
+            for (const syl of syllables) {
+              allChunks.push([
+                syl,
+                [ChunkMarkers.TEXT, syl[1], syl[2]]
+              ]);
+            }
+          }
         }
       } else {
-        // Non-Tibetan chunks
-        allChunks.push([
-          null,
-          [type, start, length]
-        ]);
+        allChunks.push([null, [type, start, length]]);
       }
     }
     

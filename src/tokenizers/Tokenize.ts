@@ -6,8 +6,8 @@
 import { Token } from './Token';
 import { BasicTrie, TrieNode } from '../tries/BasicTrie';
 import { ChunkFramework } from '../chunks/ChunkFramework';
-import { ChunkMarkers, WordMarkers, CharMarkers } from '../types';
-import { CHUNK_VALUES, CHAR_VALUES, WORD_VALUES } from '../utils/constants';
+import { ChunkMarkers, CharMarkers } from '../types';
+import { CHUNK_VALUES, CHAR_VALUES } from '../utils/constants';
 
 /**
  * Main tokenization engine that walks through pre-processed text chunks
@@ -27,7 +27,8 @@ export class Tokenize {
    * @param debug - Enable debug output
    * @returns Array of Token objects
    */
-  public tokenize(preProcessed: ChunkFramework, debug: boolean = false): Token[] {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public tokenize(preProcessed: ChunkFramework, _debug = false): Token[] {
     this.preProcessed = preProcessed;
     const tokens: Token[] = [];
 
@@ -45,7 +46,10 @@ export class Tokenize {
         
         // CHUNK IS SYLLABLE
         if (curSyl) {
-          const syl = curSyl.map(i => this.preProcessed!.text[i]).join('');
+          // curSyl is [ChunkMarkers, start, length] — extract syllable text
+          let syl = this.preProcessed!.text.substring(curSyl[1], curSyl[1] + curSyl[2]);
+          // Strip trailing tsek for trie lookup
+          if (syl.endsWith('་')) syl = syl.slice(0, -1);
           currentNode = this.trie.walk(syl, currentNode);
           
           if (currentNode) {
@@ -144,7 +148,7 @@ export class Tokenize {
     matchData: Record<number, any>,
     syls: number[],
     tokens: Token[],
-    hasDecremented: boolean = false
+    hasDecremented = false
   ): number {
     // There is a match
     if (cIdx in matchData) {
@@ -203,12 +207,12 @@ export class Tokenize {
       const chunkData = this.preProcessed!.chunks[syls[0]];
       const tokenSyls = [chunkData[0]];
       const tokenType = chunkData[1][0];
-      // Use syllable boundaries (chunkData[0]) instead of chunk boundaries (chunkData[1])
-      const tokenStart = chunkData[0]?.[1] ?? 0;
-      const tokenLength = chunkData[0]?.[2] ?? 0;
+      // Use syllable boundaries if available, otherwise use chunk meta
+      const tokenStart = chunkData[0] ? chunkData[0][1] : chunkData[1][1];
+      const tokenLength = chunkData[0] ? chunkData[0][2] : chunkData[1][2];
       const sylStartEnd = [{
-        start: chunkData[0]?.[1] ?? 0,
-        end: (chunkData[0]?.[1] ?? 0) + (chunkData[0]?.[2] ?? 0)
+        start: tokenStart,
+        end: tokenStart + tokenLength
       }];
 
       if (ttype) {
@@ -281,10 +285,22 @@ export class Tokenize {
     });
 
     if (syls[0] !== null) {
-      // Convert syllable indices to be relative to token start
+      // Generate character indices for each syllable, excluding tsek
       token.sylsIdx = syls
         .filter(syl => syl !== null)
-        .map(syl => syl!.map(s => s - start));
+        .map(syl => {
+          const indices: number[] = [];
+          const sylStart = syl![1];
+          const sylLen = syl![2];
+          for (let j = 0; j < sylLen; j++) {
+            const absIdx = sylStart + j;
+            const ct = this.preProcessed!.getCharType(absIdx);
+            if (ct !== CharMarkers.TSEK) {
+              indices.push(absIdx - start);
+            }
+          }
+          return indices;
+        });
       
       token.sylsStartEnd = sylStartEnd.map(({ start: s, end: e }) => ({
         start: s - start,
@@ -295,11 +311,10 @@ export class Tokenize {
     // Get character types for the token
     const charTypes: CharMarkers[] = [];
     for (let i = 0; i < length; i++) {
-      const char = this.preProcessed!.text[start + i];
       const charType = this.preProcessed!.getCharType(start + i);
       charTypes.push(charType);
     }
-    token.charTypes = charTypes;
+    token.charTypes = charTypes.map(ct => CHAR_VALUES[ct] || 'unknown');
 
     // Copy data properties to token
     Object.assign(token, data);
