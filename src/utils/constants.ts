@@ -14,7 +14,7 @@ export const HASH = '#';        // Comment marker
 export const SPACE = ' ';
 
 // Vowels that affect syllable formation
-export const VOWELS = ['ི'];
+export const VOWELS = ['ི', 'ུ', 'ེ', 'ོ', 'ཱ'];
 
 // Consonants that don't take final shad
 export const NO_SHAD_CONS = ['ཀ', 'ག', 'ཤ'];
@@ -156,10 +156,16 @@ export const POS_TAGS = {
 export const CHUNK_VALUES: Record<number, string> = {
   100: 'TEXT',
   101: 'PUNCT',
-  102: 'NON_PUNCT',
-  103: 'BO',
-  104: 'NON_BO',
-  105: 'OTHER'
+  102: 'NON_BO',
+  103: 'NON_PUNCT',
+  104: 'NUM',
+  105: 'NON_NUM',
+  106: 'SYM',
+  107: 'NON_SYM',
+  108: 'BO',
+  109: 'OTHER',
+  110: 'LATIN',
+  111: 'CJK'
 };
 
 // Mapping for character markers to string values  

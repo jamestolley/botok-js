@@ -43,9 +43,9 @@ export class WordTokenizer {
    */
   public tokenize(
     text: string,
-    splitAffixes: boolean = true,
-    spacesAsPunct: boolean = false,
-    debug: boolean = false
+    splitAffixes = true,
+    spacesAsPunct = false,
+    debug = false
   ): Token[] {
     // Preprocess text into chunks
     const preprocessed = new ChunkFramework(text, Array.from(this.ignoreChars), spacesAsPunct);

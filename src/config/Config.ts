@@ -14,7 +14,7 @@ export class Config {
   public readonly adjustments: Record<string, any>;
 
   constructor(
-    profile: string = 'general',
+    profile = 'general',
     dialectPackPath?: string,
     dictionary?: Record<string, any>,
     adjustments?: Record<string, any>

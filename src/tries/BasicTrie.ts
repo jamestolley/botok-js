@@ -139,7 +139,7 @@ export class BasicTrie {
   /**
    * Walk one step through the trie
    */
-  public walk(char: string, currentNode?: TrieNode): TrieNode | null {
+  public walk(char: string, currentNode?: TrieNode | null): TrieNode | null {
     if (!currentNode) {
       currentNode = this.head;
     }
