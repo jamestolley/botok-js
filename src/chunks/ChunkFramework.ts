@@ -414,6 +414,6 @@ export class ChunkFramework extends ChunkFrameworkBase {
    * Get character type at position
    */
   public getCharType(position: number): CharMarkers {
-    return this.bs.getCharType(position) || CharMarkers.OTHER;
+    return this.bs.getCharType(position) ?? CharMarkers.OTHER;
   }
 }
